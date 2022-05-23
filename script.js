@@ -1,11 +1,4 @@
 const SABLE_SITEWIDE = (() => {
-	// call init function when the page is ready
-	if (document.readyState !== "loading") {
-		init();
-	} else {
-		document.addEventListener("DOMContentLoaded", init);
-	}
-
 	/*
 	CODE GROUPS
 	1. old nav
@@ -14,6 +7,7 @@ const SABLE_SITEWIDE = (() => {
 	4. section slider
 	5. compressed tables
 	6. sticky phones
+	7. splide reviews
 	*/
 
 	// breakpoints
@@ -49,6 +43,16 @@ const SABLE_SITEWIDE = (() => {
 	const COMPRESSED_ITEMS = document.querySelectorAll(".compressed-table__items .table-item");
 	const COMPRESSED_SELECT = document.querySelector(".compressed-table__select");
 
+	// splide reviews
+	const SPLIDES = document.querySelectorAll(".splide");
+
+	// call init function when the page is ready
+	if (document.readyState !== "loading") {
+		init();
+	} else {
+		document.addEventListener("DOMContentLoaded", init);
+	}
+
 	// initialize
 	function init() {
 		console.log("SITEWIDE");
@@ -67,6 +71,50 @@ const SABLE_SITEWIDE = (() => {
 
 		// breakpoint dependant prep
 		compressedTableMobilePrep();
+
+		// splide reviews
+		if (SPLIDES.length > 0) {
+			SABLE_LOADER.newElement("script", document.body, {
+				src: "https://cdn.jsdelivr.net/npm/@splidejs/splide@3.2.2/dist/js/splide.min.js",
+				callback: initSplide
+			});
+
+			function initSplide() {
+				SPLIDES.forEach((splide) => {
+					new Splide(splide, {
+						perPage: 2,
+						perMove: 1,
+						focus: 0,
+						type: "loop",
+						autoplay: true,
+						gap: "48px",
+						arrows: "false",
+						pagination: "false",
+						speed: 600,
+						// rewind : false,
+						rewindSpeed: 400,
+						interval: 3500,
+						waitForTransition: false,
+						updateOnMove: true,
+						// trimSpace: false,
+						breakpoints: {
+							991: {
+								perPage: 2,
+								gap: "16px"
+							},
+							767: {
+								perPage: 1,
+								gap: "16px"
+							},
+							479: {
+								perPage: 1,
+								gap: "8px"
+							}
+						}
+					}).mount();
+				});
+			}
+		}
 	}
 
 	// reactive code
@@ -217,38 +265,6 @@ const SABLE_SITEWIDE = (() => {
 		}
 	}
 
-	const CREATE_ELEMENT = (type, location, options = {}) => {
-		const element = document.createElement(type);
-
-		Object.entries(options).forEach(([key, value]) => {
-			if (key === "class") {
-				element.classList.add(value);
-				return;
-			}
-
-			if (key === "dataset") {
-				Object.entries(value).forEach(([dataKey, dataValue]) => {
-					element.dataset[dataKey] = dataValue;
-				});
-				return;
-			}
-
-			if (key === "text") {
-				element.textContent = value;
-				return;
-			}
-
-			if (key === "callback") {
-				element.onload = value;
-				return;
-			}
-
-			element.setAttribute(key, value);
-		});
-
-		location.appendChild(element);
-	};
-
 	function compressedTableMobilePrep() {
 		if (COMPRESSED_TABLE && (isLandscape || isMobile)) {
 			// prep the select
@@ -256,6 +272,11 @@ const SABLE_SITEWIDE = (() => {
 			COMPRESSED_TITLES.forEach((title, index) => {
 				if (index === 0) return;
 				let name = title.textContent;
+				if (title.firstElementChild.firstElementChild.firstElementChild) {
+					let hiddenText = title.firstElementChild.firstElementChild.firstElementChild.textContent;
+					let expression = new RegExp(hiddenText, "g");
+					name = name.replace(expression, "");
+				}
 				let option = document.createElement("option");
 				option.text = name;
 				option.value = name.toLowerCase().replaceAll(" ", "-");
@@ -276,6 +297,7 @@ const SABLE_SITEWIDE = (() => {
 		isTablet,
 		isLandscape,
 		isMobile,
-		CREATE_ELEMENT
+		NAV_BRAND,
+		NAV_BUTTON
 	};
 })();
