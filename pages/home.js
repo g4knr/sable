@@ -31,14 +31,14 @@ const SABLE_HOME = (() => {
 			let count = 0;
 
 			// load gsap
-			SABLE_SITEWIDE.CREATE_ELEMENT("script", document.body, {
+			SABLE_LOADER.newElement("script", document.body, {
 				src: "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js",
 				callback: triggerSticky,
 				async: true
 			});
 
 			// load scrollTrigger
-			SABLE_SITEWIDE.CREATE_ELEMENT("script", document.body, {
+			SABLE_LOADER.newElement("script", document.body, {
 				src: "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/ScrollTrigger.min.js",
 				callback: triggerSticky,
 				async: true
