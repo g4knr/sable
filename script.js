@@ -76,6 +76,7 @@ const SABLE_SITEWIDE = (() => {
 		if (SPLIDES.length > 0) {
 			SABLE_LOADER.newElement("script", document.body, {
 				src: "https://cdn.jsdelivr.net/npm/@splidejs/splide@3.2.2/dist/js/splide.min.js",
+				defer: true,
 				callback: initSplide
 			});
 
@@ -181,6 +182,7 @@ const SABLE_SITEWIDE = (() => {
 						target.parentElement.classList.remove("text-color-white");
 						NAV_BRAND.classList.add("filter-invert");
 						NAV_BUTTON.classList.add("on-light");
+						window.scrollBy(0, 1);
 					});
 				});
 			}
